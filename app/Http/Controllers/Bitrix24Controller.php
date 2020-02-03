@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Validator;
 
 class Bitrix24Controller extends Controller
 {
-    protected $webhook = "https://isigo.bitrix24.com.br/rest/1/bqp8u3keaiaacp9e/";
+    protected function webHook()
+    {
+        $webhook = 'https://isigo.bitrix24.com.br/rest/1/bqp8u3keaiaacp9e/';
+
+        return $webhook;
+    }  
     
     public function getDeals()
     {
@@ -41,7 +46,7 @@ class Bitrix24Controller extends Controller
             ], 422);
         }
 
-        $queryUrl = "https://isigo.bitrix24.com.br/rest/1/bqp8u3keaiaacp9e/crm.deal.add";
+        $queryUrl = $this->webHook;
 
         $queryData = http_build_query(array(
                         'fields' => array(    
@@ -70,13 +75,11 @@ class Bitrix24Controller extends Controller
     
         if (array_key_exists('error', $result)){
     
-            echo "Error: ".$result['error_description']."<br/>";
-
-            writeToLog("Error: ", $result);
+            return response()->json($result, 400);
     
         }
     
-        return $result['result'];    
+        return response()->json($result, 200);   
 
     }
 
