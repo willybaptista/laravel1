@@ -46,7 +46,7 @@ class Bitrix24Controller extends Controller
             ], 422);
         }
 
-        $queryUrl = $this->webHook;
+        $queryUrl = $this->webHook();
 
         $queryData = http_build_query(array(
                         'fields' => array(    
