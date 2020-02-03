@@ -43,9 +43,38 @@ class Bitrix24Controller extends Controller
         return response()->json($result, 200);   
     }
 
-    public function getDeal($id)
+    public function getDeal(Request $request, $id)
     {
-        $queryUrl = "https://isigo.bitrix24.com.br/rest/1/bqp8u3keaiaacp9e/crm.deal.get";
+        $queryUrl = $this->webHook()."crm.deal.get";
+
+        $queryData = http_build_query(array(
+            'ID' => $id
+        ));
+    
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+    
+                            CURLOPT_SSL_VERIFYPEER => 0,
+                            CURLOPT_POST => 1,
+                            CURLOPT_HEADER => 0,
+                            CURLOPT_RETURNTRANSFER => 1,
+                            CURLOPT_URL => $queryUrl,
+                            CURLOPT_POSTFIELDS => $queryData
+    
+                        ));
+    
+        $result = curl_exec($curl);
+        curl_close($curl);
+    
+        $result = json_decode($result, 1);
+    
+        if (array_key_exists('error', $result)){
+    
+            return response()->json($result, 400);
+    
+        }
+    
+        return response()->json($result, 200); 
 
     }
 
