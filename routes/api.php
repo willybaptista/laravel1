@@ -27,6 +27,7 @@ Route::prefix('/pessoas')->group(function() {
 
 Route::prefix('/bitrix24/deals')->group(function() {
     Route::get('/', 'Bitrix24Controller@getDeals')->name('deals');
+    Route::get('/{id}', 'Bitrix24Controller@getDeal')->name('get.deal');
     Route::post('add', 'Bitrix24Controller@addDeal')->name('add.deal');
     Route::put('update/{id}', 'Bitrix24Controller@update')->name('update.deals');
     Route::delete('delete/{id}', 'Bitrix24Controller@delete')->name('delete.deals');  
