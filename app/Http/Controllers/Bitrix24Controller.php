@@ -15,8 +15,32 @@ class Bitrix24Controller extends Controller
     }  
     
     public function getDeals()
-    {
-
+    {        
+        $queryUrl = $this->webHook()."crm.deal.list";
+    
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+    
+                            CURLOPT_SSL_VERIFYPEER => 0,
+                            CURLOPT_POST => 1,
+                            CURLOPT_HEADER => 0,
+                            CURLOPT_RETURNTRANSFER => 1,
+                            CURLOPT_URL => $queryUrl	
+    
+                        ));
+    
+        $result = curl_exec($curl);
+        curl_close($curl);
+    
+        $result = json_decode($result, 1);
+    
+        if (array_key_exists('error', $result)){
+    
+            return response()->json($result, 400);
+    
+        }
+    
+        return response()->json($result, 200);   
     }
 
     public function getDeal($id)
